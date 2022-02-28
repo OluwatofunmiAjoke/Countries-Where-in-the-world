@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+    <link rel="stylesheet" href="styles.css">
+    <title>Where in the World?</title>
+</head>
+<body>
+    <div>
+    <header class="header">
+        <div class="container">
+            <h1>Where in the world?</h1>
+            <button class="darkModeToggle"><span class="material-icons-outlined">dark_mode</span>Dark Mode</button>
+        </div>
+    </header>
+
+    <section class="detail">
+        <button class="backBtn"><span class="material-icons-outlined">keyboard_backspace</span>Back</button>
+
+        <div class="desktopFlex">
+            <div class="flexible detailFlagContainer">
+                <img src="https://flagcdn.com/de.svg" class="detailFlag">
+            </div>
+
+            <div class="flexible detailsInfo">
+                <h2 class="detailCountryName">Germany</h2>
+                <div class="flex">
+                    <ul class="detailFacts">
+                        <li><strong>Native Name: </strong>Belgie</li>
+                        <li><strong>Population: </strong>11,319,511</li>
+                        <li><strong>Region: </strong>Europe</li>
+                        <li><strong>Sub region: </strong>Western Europe</li>
+                        <li><strong>Capital: </strong>Brussels</li>
+                    </ul>
+
+                    <ul class="detailFacts">
+                        <li><strong>Top Level Domain: </strong>.be</li>
+                        <li><strong>Currencies: </strong>Euro</li>
+                        <li><strong>Language: </strong>Dutch, French, German</li>
+                    </ul>
+                </div>
+
+                <div class="detailBorders">
+                    <h3>Border Countries:</h3>
+                    <div class="borderContainer">
+                        <!-- to be dynamically generated with Javascript, this is a placeholder -->
+                        <button class="borderCountry">France</button>
+                        <button class="borderCountry">Belgium</button>
+                        <button class="borderCountry">Netherlands</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+</body>
+</html>
