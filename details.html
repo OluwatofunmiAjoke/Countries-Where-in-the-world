@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="styles.css">
     <title>Where in the World?</title>
 </head>
-<body>
+<body onload="showDetails()">
     <div>
     <header class="header">
         <div class="container">
@@ -22,41 +22,11 @@
         <button class="backBtn"><span class="material-icons-outlined">keyboard_backspace</span>Back</button>
 
         <div class="desktopFlex">
-            <div class="flexible detailFlagContainer">
-                <img src="https://flagcdn.com/de.svg" class="detailFlag">
-            </div>
-
-            <div class="flexible detailsInfo">
-                <h2 class="detailCountryName">Germany</h2>
-                <div class="flex">
-                    <ul class="detailFacts">
-                        <li><strong>Native Name: </strong>Belgie</li>
-                        <li><strong>Population: </strong>11,319,511</li>
-                        <li><strong>Region: </strong>Europe</li>
-                        <li><strong>Sub region: </strong>Western Europe</li>
-                        <li><strong>Capital: </strong>Brussels</li>
-                    </ul>
-
-                    <ul class="detailFacts">
-                        <li><strong>Top Level Domain: </strong>.be</li>
-                        <li><strong>Currencies: </strong>Euro</li>
-                        <li><strong>Language: </strong>Dutch, French, German</li>
-                    </ul>
-                </div>
-
-                <div class="detailBorders">
-                    <h3>Border Countries:</h3>
-                    <div class="borderContainer">
-                        <!-- to be dynamically generated with Javascript, this is a placeholder -->
-                        <button class="borderCountry">France</button>
-                        <button class="borderCountry">Belgium</button>
-                        <button class="borderCountry">Netherlands</button>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </section>
 
 </div>
+<script src="app.js"></script>
 </body>
 </html>
