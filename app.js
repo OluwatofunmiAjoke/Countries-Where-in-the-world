@@ -74,7 +74,6 @@ function showDetails(){
     .then(function(data){
         let currCountry = data.filter(country => country.name === name);
         
-        
         detail.appendChild(desktopFlex);
         let flagContainer = document.createElement('div');
         flagContainer.classList.add('flexible');
@@ -151,14 +150,27 @@ function showDetails(){
         detailBorders.appendChild(borderContainer);
 
         // dynamically generate borders from api
+        //get alpha3code and match to country name, then generate button with border name
 
+        //forEach alpha3 code check data for each name
 
-
-
-
+        let borderCountryCode = currCountry.map(country => country.borders);
+        //use array destructuring to remove external array
+        let [borderCode] = borderCountryCode;
+        
+        //loop through each array item and link to alpha code
+        for (let i = 0; i<borderCode.length; i++){
+            let borderCountry = data.filter(country => country.alpha3Code === borderCode[i]).map(countryName => countryName.name).toString();
+            let borderBtn = document.createElement('button');
+            borderBtn.innerHTML = borderCountry;
+            borderBtn.classList.add('borderCountry');
+            borderBtn.appendChild(borderContainer)
+            // console.log(borderCountries)    
+        }
     
     });
 };
+
 
 
 
