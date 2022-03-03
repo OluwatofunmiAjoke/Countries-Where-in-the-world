@@ -1,19 +1,41 @@
-// let eachCountry = document.querySelectorAll('.countryContainer');
-// let flagImage  = document.querySelector('.flagContainer');
-// let countryName  = document.querySelector('countryName');
-// let countryFacts  = document.querySelector('countryFacts');
 let showCountries = document.querySelector('.showCountries');
 let desktopFlex = document.querySelector('.desktopFlex');
 let detail = document.querySelector('.detail');
+let back = document.querySelector('.backBtn');
+let modeToggle = document.querySelector('.darkModeToggle');
+let body = document.querySelector('body');
+let material_icon = document.querySelector('.material-icons-outlined');
+let light_material = document.createElement('span');
+light_material.classList.add('material-icons-outlined');
+light_material.textContent = "light_mode";
+
+modeToggle.addEventListener('click', toggleMode);
+
+function toggleMode(){
+    if(!body.classList.contains('dark')){
+        //change to dark mode
+        body.classList.add('dark');
+        modeToggle.innerText = "Light Mode"
+        modeToggle.appendChild(light_material);
+    }
+    else{
+        //change to light mode
+        body.classList.remove('dark');
+        modeToggle.innerText = "Dark Mode"
+        material_icon.textContent = "dark_mode"
+    }
+}
 
 
+if(location.href == 'http://127.0.0.1:5501/details.html'){
+    back.addEventListener('click', goBack);
+}
+
+function goBack(){
+    location.replace('http://127.0.0.1:5501/index.html');
+}
 
 const url = "https://restcountries.com/v2/all";
-
-
-//event listeners
-
-//event listeners for all countries displayed to show details
 
 //function to get countries from API, called on page load
 if(location.href == 'http://127.0.0.1:5501/index.html'){
@@ -67,6 +89,8 @@ if(location.href == 'http://127.0.0.1:5501/index.html'){
 }
 }
 
+
+//function to show details of countries
 function showDetails(){
     let name = localStorage.getItem("name");
     fetch(url)
@@ -116,7 +140,7 @@ function showDetails(){
         subRegion.appendChild(document.createTextNode(`Sub region: ${currCountry[0].subregion}`));
         detailFacts.appendChild(subRegion);
         let capital = document.createElement('li');
-        capital.appendChild(document.createTextNode(`Native Name: ${currCountry[0].capital}`));
+        capital.appendChild(document.createTextNode(`Capital: ${currCountry[0].capital}`));
         detailFacts.appendChild(capital);
 
         let detailFacts2 = document.createElement('ul');
@@ -124,7 +148,7 @@ function showDetails(){
         flexDiv.appendChild(detailFacts2);
         
         let topLevelDomain = document.createElement('li');
-        topLevelDomain.appendChild(document.createTextNode(`Native Name: ${currCountry[0].topLevelDomain[0]}`));
+        topLevelDomain.appendChild(document.createTextNode(`Top Level Domain: ${currCountry[0].topLevelDomain[0]}`));
         detailFacts2.appendChild(topLevelDomain);
         let currencies = document.createElement('li');
         currencies.appendChild(document.createTextNode(`Currency: ${currCountry[0].currencies[0].name}`));
@@ -148,34 +172,37 @@ function showDetails(){
         let borderContainer = document.createElement('div');
         borderContainer.classList.add('borderContainer');
         detailBorders.appendChild(borderContainer);
-
+        
         // dynamically generate borders from api
         //get alpha3code and match to country name, then generate button with border name
-
-        //forEach alpha3 code check data for each name
 
         let borderCountryCode = currCountry.map(country => country.borders);
         //use array destructuring to remove external array
         let [borderCode] = borderCountryCode;
-        
-        //loop through each array item and link to alpha code
-        for (let i = 0; i<borderCode.length; i++){
-            let borderCountry = data.filter(country => country.alpha3Code === borderCode[i]).map(countryName => countryName.name).toString();
-            let borderBtn = document.createElement('button');
-            borderBtn.innerHTML = borderCountry;
-            borderBtn.classList.add('borderCountry');
-            borderBtn.appendChild(borderContainer)
-            // console.log(borderCountries)    
+
+
+        //removing border container if country has no borders defined
+        if(borderCountryCode.includes(undefined)){
+            detailBorders.remove();
         }
-    
+        else{
+            for (let i = 0; i<borderCode.length; i++){
+                let borderCountry = data.filter(country => country.alpha3Code === borderCode[i]).map(countryName => countryName.name).toString();
+                let borderBtn = document.createElement('button');
+                borderBtn.innerHTML = borderCountry;
+                borderBtn.classList.add('borderCountry');
+                borderContainer.appendChild(borderBtn);  
+                
+            }
+        }
     });
 };
 
-
-
-
-//fetch and display all countries from API and their respective details
-
-// work on search, show results while searching
-
-//work on filter selection
+//event listener for border countries, calls on show details once clicked
+document.addEventListener('click',function(e){
+    if(e.target.className == 'borderCountry'){
+          let clickedName = e.target.innerText;
+          localStorage.setItem("name", clickedName);
+          location.replace('http://127.0.0.1:5501/details.html');
+     }
+ }); 
