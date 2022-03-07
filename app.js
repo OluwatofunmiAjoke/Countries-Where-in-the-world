@@ -1,3 +1,4 @@
+//all querySelectors
 let showCountries = document.querySelector('.showCountries');
 let desktopFlex = document.querySelector('.desktopFlex');
 let detail = document.querySelector('.detail');
@@ -5,37 +6,87 @@ let back = document.querySelector('.backBtn');
 let modeToggle = document.querySelector('.darkModeToggle');
 let body = document.querySelector('body');
 let material_icon = document.querySelector('.material-icons-outlined');
-let light_material = document.createElement('span');
-light_material.classList.add('material-icons-outlined');
-light_material.textContent = "light_mode";
+let searchField = document.querySelector('.search');
 
+let continentUl = document.querySelector('.filters');
+let resultSearch = document.querySelector('.searchResults');
+
+//variables declared
+const url = "https://restcountries.com/v2/all";
+let search_term ='';
+
+
+//all event listeners
 modeToggle.addEventListener('click', toggleMode);
+continentUl.addEventListener('change', filterCountries);
 
+//toggle between light or dark mode
 function toggleMode(){
     if(!body.classList.contains('dark')){
         //change to dark mode
         body.classList.add('dark');
-        modeToggle.innerText = "Light Mode"
-        modeToggle.appendChild(light_material);
+        modeToggle.innerText = "Light Mode";
+        material_icon.innerHTML = 'light_mode';
+        // modeToggle.appendChild(light_material);
     }
     else{
         //change to light mode
         body.classList.remove('dark');
         modeToggle.innerText = "Dark Mode"
-        material_icon.textContent = "dark_mode"
+        material_icon.innerHTML = "dark_mode"
     }
 }
 
+//index page actions
 
-if(location.href == 'http://127.0.0.1:5501/details.html'){
-    back.addEventListener('click', goBack);
+//search countries function
+searchField.addEventListener('input', (event) => {
+    search_term = event.target.value.toLowerCase();
+    showList();
+})
+
+function showList(){
+    // showCountries.style.display = "none";
+    fetch(url)
+        .then(res => res.json())
+        .then(function(data){
+            //get input and append to showCountries div
+            data
+            .filter((item) => {
+                results = item.name.toLowerCase().includes(search_term);
+                return (results);
+            })
+            .forEach((e) => {
+                if(results){
+                    showCountry(e);
+                } 
+            })
+        })
+};
+
+
+//filter countries by region
+function filterCountries(){
+    let continentSelected = continentUl.options[continentUl.selectedIndex].value;
+    //should be a better way to show all countries when all region is selected
+    if(continentSelected === 'all'){
+        location.replace('http://127.0.0.1:5501/index.html');
+    }
+    else{
+        fetch(url)
+        .then(res => res.json())
+        .then(function(data){
+            continentCountries = data.filter(country => country.region === continentSelected);
+            if(continentCountries){
+                showCountries.innerHTML = "";
+                continentCountries.forEach(country => showCountry(country))
+            }
+            else{
+                console.log("no countries found");
+            }
+        });
+    }
 }
-
-function goBack(){
-    location.replace('http://127.0.0.1:5501/index.html');
-}
-
-const url = "https://restcountries.com/v2/all";
 
 //function to get countries from API, called on page load
 if(location.href == 'http://127.0.0.1:5501/index.html'){
@@ -45,38 +96,7 @@ if(location.href == 'http://127.0.0.1:5501/index.html'){
         .then(function(data){
             //loop through array of objects and get flag image, country name, population, region and capital and assign to respective HTML elements
             data.forEach(function(country){
-                let sectionCountry = document.createElement('section');
-                sectionCountry.classList.add('countryContainer');
-                showCountries.appendChild(sectionCountry);
-
-                let flag = document.createElement('img');
-                flag.classList.add('flagContainer');
-                flag.src = country.flags.svg;
-                sectionCountry.appendChild(flag);
-
-                let countryDetails = document.createElement('div');
-                countryDetails.classList.add('countryDetails');
-                sectionCountry.appendChild(countryDetails);
-
-                let countryName = document.createElement('h2');
-                countryName.classList.add('countryName')
-                countryName.innerHTML = country.name;
-                countryDetails.appendChild(countryName);
-
-                let countryFacts = document.createElement('ul');
-                countryFacts.classList.add('countryFacts');
-                countryDetails.appendChild(countryFacts);
-                
-                let population = document.createElement('li');
-                population.appendChild(document.createTextNode(`Population: ${country.population}`));
-                countryFacts.appendChild(population);
-                let region = document.createElement('li');
-                region.appendChild(document.createTextNode(`Region: ${country.region}`))
-                countryFacts.appendChild(region);
-                let capital = document.createElement('li');
-                capital.appendChild(document.createTextNode(`Capital: ${country.capital}`))
-                countryFacts.appendChild(capital);
-            });
+                showCountry(country);
         });
         //add details event listener after onload else it throws an error because code is executed before DOM is loaded
         showCountries.addEventListener('click', function(e) {
@@ -86,11 +106,57 @@ if(location.href == 'http://127.0.0.1:5501/index.html'){
                 location.replace('http://127.0.0.1:5501/details.html');
             }
         });
+});
 }
 }
 
+//function to show countries on the page, contains creation of html templates
+function showCountry(country){
+        let sectionCountry = document.createElement('section');
+        sectionCountry.classList.add('countryContainer');
+        showCountries.appendChild(sectionCountry);
 
-//function to show details of countries
+        let flag = document.createElement('img');
+        flag.classList.add('flagContainer');
+        flag.src = country.flags.svg;
+        sectionCountry.appendChild(flag);
+
+        let countryDetails = document.createElement('div');
+        countryDetails.classList.add('countryDetails');
+        sectionCountry.appendChild(countryDetails);
+
+        let countryName = document.createElement('h2');
+        countryName.classList.add('countryName')
+        countryName.innerHTML = country.name;
+        countryDetails.appendChild(countryName);
+
+        let countryFacts = document.createElement('ul');
+        countryFacts.classList.add('countryFacts');
+        countryDetails.appendChild(countryFacts);
+        
+        let population = document.createElement('li');
+        population.appendChild(document.createTextNode(`Population: ${country.population}`));
+        countryFacts.appendChild(population);
+        let region = document.createElement('li');
+        region.appendChild(document.createTextNode(`Region: ${country.region}`))
+        countryFacts.appendChild(region);
+        let capital = document.createElement('li');
+        capital.appendChild(document.createTextNode(`Capital: ${country.capital}`))
+        countryFacts.appendChild(capital);
+    }
+
+
+//back button on details html
+if(location.href == 'http://127.0.0.1:5501/details.html'){
+    back.addEventListener('click', goBack);
+}
+
+function goBack(){
+    location.replace('http://127.0.0.1:5501/index.html');
+}
+
+
+//function to show details of selected country
 function showDetails(){
     let name = localStorage.getItem("name");
     fetch(url)
@@ -179,7 +245,6 @@ function showDetails(){
         let borderCountryCode = currCountry.map(country => country.borders);
         //use array destructuring to remove external array
         let [borderCode] = borderCountryCode;
-
 
         //removing border container if country has no borders defined
         if(borderCountryCode.includes(undefined)){
