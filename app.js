@@ -11,6 +11,8 @@ let searchField = document.querySelector('.search');
 let continentUl = document.querySelector('.filters');
 let resultSearch = document.querySelector('.searchResults');
 
+
+
 //variables declared
 const url = "https://restcountries.com/v2/all";
 let search_term ='';
@@ -19,6 +21,8 @@ let search_term ='';
 //all event listeners
 modeToggle.addEventListener('click', toggleMode);
 continentUl.addEventListener('change', filterCountries);
+
+
 
 //toggle between light or dark mode
 function toggleMode(){
@@ -40,13 +44,14 @@ function toggleMode(){
 //index page actions
 
 //search countries function
-searchField.addEventListener('input', (event) => {
-    search_term = event.target.value.toLowerCase();
-    showList();
-})
+//could not get the search to display on its own
+searchField.addEventListener('input', showList);
+
 
 function showList(){
-    // showCountries.style.display = "none";
+    search_term = searchField.value;
+    let resultCountries = [];
+
     fetch(url)
         .then(res => res.json())
         .then(function(data){
@@ -54,14 +59,12 @@ function showList(){
             data
             .filter((item) => {
                 results = item.name.toLowerCase().includes(search_term);
-                return (results);
+                if(resultCountries.includes(item) === false){
+                    resultCountries.push(item);
+                }
             })
-            .forEach((e) => {
-                if(results){
-                    showCountry(e);
-                } 
+            resultCountries.forEach((searchCountry) => showCountry(searchCountry));
             })
-        })
 };
 
 

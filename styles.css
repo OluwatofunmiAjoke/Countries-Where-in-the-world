@@ -89,6 +89,10 @@ img {
     font-size: 0.9em;
 }
 
+.is-hidden{
+    display:none;
+}
+
 .darkModeToggle .material-icons-outlined {
     font-size: 18px;
 }
